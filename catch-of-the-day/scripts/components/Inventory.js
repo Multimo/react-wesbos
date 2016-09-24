@@ -1,21 +1,24 @@
 import React from 'react';
 import AddFishForm from './AddFishForm';
+import autobind from 'autobind-decorator'
 
+@autobind
+export default class Inventory extends React.Component {
 
-var Inventory = React.createClass({
-  handleRemove : function(event, key) {
+  handleRemove(event, key) {
     event.preventDefault();
     this.props.removeFish(key);
-  },
-  handleChange : function(fishKey, event) {
+  }
+
+  handleChange(fishKey, event) {
     var detail = event.target.name;
     var value = event.target.value;
     var fishKey = fishKey
 
     this.props.updateForm(fishKey, value, detail);
-  },
+  }
 
-  renderInventory : function(key){
+  renderInventory(key){
     var fishKey = key;
 
     // No judge pls
@@ -32,9 +35,9 @@ var Inventory = React.createClass({
         <button type="submit" onClick={(event) => this.handleRemove(event, key)}>+ Remove Item </button>
       </form>
     )
-  },
+  }
 
-  render: function(){
+  render(){
     return (
         <div>
           <h2>Inventory</h2>
@@ -43,15 +46,13 @@ var Inventory = React.createClass({
           <button onClick={this.props.loadSamples}>Load Samples</button>
         </div>
     )
-  },
+  }
 
-  propTypes : {
+}
+
+Inventory.propTypes = {
     fishes : React.PropTypes.object.isRequired,
     addFish : React.PropTypes.func.isRequired,
     loadSamples : React.PropTypes.func.isRequired,
     updateForm : React.PropTypes.func.isRequired
-  }
-})
-
-
-export default Inventory;
+}

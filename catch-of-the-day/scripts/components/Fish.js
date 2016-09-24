@@ -1,19 +1,20 @@
 import React from 'react';
 import helpers from '../helpers.js';
+import autobind from 'autobind-decorator'
 
+@autobind
+export default class Fish extends React.Component {
 
-var Fish = React.createClass({
-
-  sendToOrder : function() {
+  sendToOrder() {
     this.props.addToOrder(this.props.index)
-  },
+  }
 
-  render : function() {
-
+  render() {
     var details = this.props.details;
     var formatedPrice = helpers.formatPrice(details.price);
     var isAvailable = (details.status === "available" ? true : false);
     var buttonText = (isAvailable ? 'Add To Order' : 'SOLD OUT!')
+
     return (
       <li className="menu-fish">
         <img src={details.image} alt="Fish" />
@@ -25,12 +26,11 @@ var Fish = React.createClass({
         <button disabled={!isAvailable} onClick={this.sendToOrder} >{buttonText}</button>
      </li>
     )
-  },
+  }
 
-  propTypes : {
+}
+
+Fish.propTypes = {
     details : React.PropTypes.object.isRequired,
     addToOrder : React.PropTypes.func.isRequired
   }
-});
-
-export default Fish;

@@ -1,7 +1,7 @@
 import React from 'react'
 import ReactDOM from 'react-dom'
 import CSSTransitionGroup from 'react-addons-css-transition-group'
-
+import autobind from 'autobind-decorator'
 
 import { ReactRouter, Navigation, Router, Route, browserHistory } from 'react-router'
 import helpers from './helpers.js'
@@ -22,16 +22,19 @@ var base = Rebase.createClass('https://wes-react.firebaseio.com/');
 
 
 
-var App = React.createClass({
+@autobind
+export default class App extends React.Component {
+  constructor() {
+      super()
+      
+      this.state = {
+        fishes: {},
+        orders: {}
+      };
+  }
 
-  getInitialState : function() {
-    return {
-      fishes: {},
-      orders: {}
-    }
-  },
 
-  componentDidMount : function() {
+  componentDidMount() {
     base.syncState(this.props.params.storeId + '/fishes', {
       context : this,
       state : 'fishes',
@@ -45,31 +48,31 @@ var App = React.createClass({
         orders : JSON.parse(localStorageRef)
       });
     }
-  },
+  }
 
 
-  componentWillUpdate : function(nextProps, nextState) {
+  componentWillUpdate(nextProps, nextState) {
     localStorage.setItem('order/' + this.props.params.storeId, JSON.stringify(nextState.orders));
-  },
+  }
 
-  addFish : function(fish) {
+  addFish(fish) {
     var timestamp = (new Date()).getTime();
     this.state.fishes['fish-' + timestamp] = fish;
     this.setState({ fishes : this.state.fishes });
-  },
+  }
 
-  addToOrder : function(key){
+  addToOrder(key){
     this.state.orders[key] = this.state.orders[key] + 1 || 1;
     this.setState({ orders : this.state.orders });
-  },
+  }
 
-  loadSamples : function() {
+  loadSamples() {
     this.setState({
       fishes : require('./sample-fishes')
     })
-  },
+  }
 
-  updateForm : function(fishKey, value, detail) {
+  updateForm(fishKey, value, detail) {
     console.log(fishKey)
     var newValue = value;
     console.log(detail);
@@ -79,25 +82,25 @@ var App = React.createClass({
     //Didnt want to use mixins as per video so I copy the old state
     // set the new values and pass it as the new state
     this.setState({ fishes : newState });
-  },
+  }
 
-  removeFish : function(key) {
+  removeFish(key) {
     if (confirm('sure?')){
       this.state.fishes[key] = null;
         this.setState({ fishes : this.state.fishes });
     }
-  },
+  }
 
-  removeFromOrder : function(key){
+  removeFromOrder(key){
     delete this.state.orders[key];
     this.setState({ orders : this.state.orders });
-  },
+  }
 
-  renderFish : function(key) {
+  renderFish(key) {
     return <Fish key={key} index={key} details={this.state.fishes[key]} addToOrder={this.addToOrder} />
-  },
+  }
 
-  render: function(){
+  render(){
     return (
       <div className="catch-of-the-day">
         <div className="menu">
@@ -110,9 +113,7 @@ var App = React.createClass({
         <Inventory fishes={this.state.fishes} addFish={this.addFish} loadSamples={this.loadSamples} updateForm={this.updateForm} removeFish={this.removeFish}/>
       </div>
     )
-  },
+  }
 
 
-});
-
-export default App
+}

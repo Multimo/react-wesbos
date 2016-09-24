@@ -1,8 +1,9 @@
 import React from 'react'
 import CSSTransitionGroup from 'react-addons-css-transition-group'
 import helpers from '../helpers.js'
+import autobind from 'autobind-decorator'
 
-
+@autobind
 export default class Order extends React.Component {
 
   renderOrders(key) {
@@ -73,10 +74,9 @@ export default class Order extends React.Component {
       </div>
     )
   }
+}
 
-
-  propTypes : {
-    orders : React.PropTypes.object.isRequired,
-    fishes : React.PropTypes.object.isRequired
-  }
+Order.propTypes = {
+  orders : React.PropTypes.object.isRequired,
+  fishes : React.PropTypes.object.isRequired
 }
